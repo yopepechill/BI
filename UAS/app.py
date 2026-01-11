@@ -137,4 +137,5 @@ app.layout = html.Div(style={'backgroundColor': '#0B0F19', 'minHeight': '100vh',
     ]) # <--- TAMBAHKAN INI (Tutup Children utama dari html.Div pertama)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8055)
+    app.run(debug=True, port=8055, use_reloader=False)
+
