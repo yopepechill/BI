@@ -1,7 +1,7 @@
 import dash
 from dash import dcc, html
-import dash_bootstrap_components as dbc
-from dash_iconify import DashIconify
+# HAPUS: import dash_bootstrap_components as dbc 
+# HAPUS: from dash_iconify import DashIconify 
 import plotly.express as px
 import pandas as pd
 import plotly.graph_objects as go
@@ -18,7 +18,7 @@ churn_rate = (len(churn_df) / total_cust) * 100
 revenue_at_risk = churn_df['MonthlyCharges'].sum()
 
 # --- 3. CUSTOM NEON VISUALS ---
-# A. Neon Gauge for Churn Rate
+# A. Neon Gauge for Churn Rate (TIDAK ADA PERUBAHAN)
 fig_gauge = go.Figure(go.Indicator(
     mode = "gauge+number",
     value = churn_rate,
@@ -37,12 +37,12 @@ fig_gauge = go.Figure(go.Indicator(
 ))
 fig_gauge.update_layout(paper_bgcolor='rgba(0,0,0,0)', height=280, margin=dict(t=50, b=0, l=30, r=30))
 
-# B. Neon Area Chart
+# B. Neon Area Chart (TIDAK ADA PERUBAHAN)
 tenure_counts = df.groupby(['tenure', 'Churn']).size().reset_index(name='Counts')
 fig_area = px.area(tenure_counts, x="tenure", y="Counts", color="Churn",
-                   line_shape="spline",
-                   color_discrete_map={'Yes': '#00D4FF', 'No': '#7000FF'},
-                   title="<b>USER RETENTION LIFECYCLE</b>")
+                    line_shape="spline",
+                    color_discrete_map={'Yes': '#00D4FF', 'No': '#7000FF'},
+                    title="<b>USER RETENTION LIFECYCLE</b>")
 
 fig_area.update_layout(
     paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
@@ -60,88 +60,81 @@ card_style = {
     "border": "1px solid rgba(255, 255, 255, 0.125)",
     "padding": "20px"
 }
+# Penambahan styling untuk layout grid
+row_style = {'display': 'flex', 'flexWrap': 'wrap', 'gap': '15px', 'marginBottom': '15px'}
+col_style_kpi = {'flex': '1 1 23%', 'minWidth': '150px'}
+col_style_visuals = {'flex': '1 1 45%', 'minWidth': '300px'}
 
 # --- 5. DASHBOARD LAYOUT ---
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.DARKLY])
+# external_stylesheets dihilangkan karena dbc.themes.DARKLY dihapus
+app = dash.Dash(__name__) 
 
 app.layout = html.Div(style={'backgroundColor': '#0B0F19', 'minHeight': '100vh', 'color': 'white', 'padding': '30px'}, children=[
     
-    # Header Section
-    dbc.Row([
-        dbc.Col([
-            html.Div([
-                html.H1("RETAIN_OS v2.6", className="fw-bold mb-0", style={'letterSpacing': '5px', 'color': '#00D4FF'}),
-                html.P("PREDICTIVE CUSTOMER INTELLIGENCE", className="text-muted", style={'letterSpacing': '2px'})
-            ])
-        ], md=8),
-        dbc.Col([
-            html.Div([
-                DashIconify(icon="solar:shield-warning-bold", width=30, color="#FF0055"),
-                html.Span("HIGH RISK ALERT", className="ms-2 fw-bold", style={'color': '#FF0055'})
-            ], className="text-end")
-        ], md=4)
-    ], className="mb-5 align-items-center"),
+    # Header Section (Mengganti dbc.Row dan dbc.Col)
+    html.Div(style={'display': 'flex', 'justifyContent': 'space-between', 'alignItems': 'center', 'marginBottom': '40px'}, children=[
+        # Kiri: Judul
+        html.Div(children=[
+            html.H1("RETAIN_OS v2.6", style={'letterSpacing': '5px', 'color': '#00D4FF', 'fontSize': '32px', 'fontWeight': 'bold', 'marginBottom': '0'}),
+            html.P("PREDICTIVE CUSTOMER INTELLIGENCE", style={'letterSpacing': '2px', 'color': '#A0AEC0', 'marginTop': '5px'})
+        ]),
+        # Kanan: Alert (Mengganti DashIconify)
+        html.Div(style={'display': 'flex', 'alignItems': 'center'}, children=[
+            # Ganti Iconify dengan Div kosong sebagai placeholder
+            html.Div(style={'width': '30px', 'height': '30px', 'backgroundColor': '#FF0055', 'borderRadius': '50%'}),
+            html.Span("HIGH RISK ALERT", style={'marginLeft': '10px', 'fontWeight': 'bold', 'color': '#FF0055'})
+        ])
+        ]),
 
-    # KPI Row
-    dbc.Row([
-        dbc.Col(html.Div([
-            html.Small("DATABASE SIZE", className="text-muted"),
+    # KPI Row (Mengganti dbc.Row dan dbc.Col)
+    html.Div(style=row_style, children=[
+        html.Div(html.Div([
+            html.Small("DATABASE SIZE", style={'color': '#A0AEC0'}),
             html.H2(f"{total_cust:,}", style={'color': '#FFFFFF', 'fontWeight': '800'})
-        ], style=card_style), md=3),
+        ], style=card_style), style=col_style_kpi),
         
-        dbc.Col(html.Div([
-            html.Small("MONTHLY REVENUE RISK", className="text-muted"),
+        html.Div(html.Div([
+            html.Small("MONTHLY REVENUE RISK", style={'color': '#A0AEC0'}),
             html.H2(f"${revenue_at_risk:,.0f}", style={'color': '#7000FF', 'fontWeight': '800'})
-        ], style=card_style), md=3),
+        ], style=card_style), style=col_style_kpi),
         
-        dbc.Col(html.Div([
-            html.Small("HEALTH SCORE", className="text-muted"),
+        html.Div(html.Div([
+            html.Small("HEALTH SCORE", style={'color': '#A0AEC0'}),
             html.H2("74.2%", style={'color': '#00FF94', 'fontWeight': '800'})
-        ], style=card_style), md=3),
+        ], style=card_style), style=col_style_kpi),
         
-        dbc.Col(html.Div([
-            html.Small("AVG TENURE", className="text-muted"),
+        html.Div(html.Div([
+            html.Small("AVG TENURE", style={'color': '#A0AEC0'}),
             html.H2("32.4 Mo", style={'color': '#FFB800', 'fontWeight': '800'})
-        ], style=card_style), md=3),
-    ], className="mb-4 g-3"),
+        ], style=card_style), style=col_style_kpi),
+    ]),
 
-    # Main Visuals
-    dbc.Row([
+    # Main Visuals (Mengganti dbc.Row dan dbc.Col)
+    html.Div(style=row_style, children=[
         # Gauge Chart
-        dbc.Col(html.Div([
+        html.Div(html.Div([
             dcc.Graph(figure=fig_gauge, config={'displayModeBar': False})
-        ], style=card_style), md=4),
+        ], style=card_style), style={'flex': '1 1 30%', 'minWidth': '280px'}),
         
         # Area Chart
-        dbc.Col(html.Div([
+        html.Div(html.Div([
             dcc.Graph(figure=fig_area, config={'displayModeBar': False})
-        ], style=card_style), md=8),
-    ], className="g-3 mb-4"),
+        ], style=card_style), style={'flex': '1 1 65%', 'minWidth': '500px'}),
+    ]),
 
-    # Bottom Analysis Section
-    dbc.Row([
-        dbc.Col(html.Div([
-            html.H5("CONTRACTUAL RISK MATRIX", className="mb-4 fw-bold"),
-            dbc.Row([
-                dbc.Col([
-                    html.Div([
-                        html.Div(style={'width': '10px', 'height': '10px', 'backgroundColor': '#00D4FF', 'borderRadius': '50%'}),
-                        html.Span("Month-to-Month", className="ms-3 text-white-50"),
-                        html.H4("42% Churn Rate", className="ms-auto fw-bold", style={'color': '#00D4FF'})
-                    ], className="d-flex align-items-center mb-3 p-3", style={'backgroundColor': 'rgba(255,255,255,0.03)', 'borderRadius': '12px'})
-                ], md=6),
-                dbc.Col([
-                    html.Div([
-                        html.Div(style={'width': '10px', 'height': '10px', 'backgroundColor': '#7000FF', 'borderRadius': '50%'}),
-                        html.Span("Long Term Contract", className="ms-3 text-white-50"),
-                        html.H4("6.4% Churn Rate", className="ms-auto fw-bold", style={'color': '#7000FF'})
-                    ], className="d-flex align-items-center mb-3 p-3", style={'backgroundColor': 'rgba(255,255,255,0.03)', 'borderRadius': '12px'})
-                ], md=6),
-            ])
-        ], style=card_style), width=12)
-    ])
-])
+   # Bottom Analysis Section (DIPERBAIKI)
+        html.Div(style=row_style, children=[
+            html.Div(html.Div([
+                html.H3("CUSTOMER SEGMENTATION INSIGHTS", style={'color': '#FFFFFF', 'fontWeight': '700'}),
+                html.P("Segmentasi pelanggan berdasarkan lama berlangganan dan biaya bulanan...", style={'color': '#A0AEC0'})
+            ], style=card_style), style={'flex': '1 1 48%', 'minWidth': '300px'}),
+            
+            html.Div(html.Div([
+                html.H3("PREDICTIVE MODELING OVERVIEW", style={'color': '#FFFFFF', 'fontWeight': '700'}),
+                html.P("Model prediktif menggunakan variabel seperti lama berlangganan...", style={'color': '#A0AEC0'})
+            ], style=card_style), style={'flex': '1 1 48%', 'minWidth': '300px'}),
+        ]) # Tutup Row ini
+    ]) # <--- TAMBAHKAN INI (Tutup Children utama dari html.Div pertama)
 
 if __name__ == '__main__':
     app.run(debug=True, port=8055)
-
