@@ -1,3 +1,4 @@
+pip install dash-bootstrap-components
 import dash
 from dash import dcc, html
 import dash_bootstrap_components as dbc
@@ -144,3 +145,4 @@ app.layout = html.Div(style={'backgroundColor': '#0B0F19', 'minHeight': '100vh',
 
 if __name__ == '__main__':
     app.run(debug=True, port=8055)
+
