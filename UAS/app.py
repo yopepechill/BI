@@ -1,9 +1,5 @@
 import dash
 from dash import dcc, html
-from dash_iconify import DashIconify
-import plotly.express as px
-import pandas as pd
-import plotly.graph_objects as go
 
 # --- 1. DATA PREPARATION ---
 url = 'https://raw.githubusercontent.com/IBM/telco-customer-churn-on-icp4d/master/data/Telco-Customer-Churn.csv'
@@ -143,6 +139,7 @@ app.layout = html.Div(style={'backgroundColor': '#0B0F19', 'minHeight': '100vh',
 
 if __name__ == '__main__':
     app.run(debug=True, port=8055)
+
 
 
 
